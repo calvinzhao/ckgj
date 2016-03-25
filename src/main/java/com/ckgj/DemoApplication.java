@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-
+//http://kielczewski.eu/2014/12/spring-boot-security-application/
 @SpringBootApplication
 public class DemoApplication {
     @Bean
@@ -22,28 +22,6 @@ public class DemoApplication {
                 return messageRepository().findMessage(Long.valueOf(id));
             }
         };
-    }
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("/", "/public/**").permitAll()
-                .antMatchers("/users/**").hasAuthority("ADMIN")
-                .anyRequest().fullyAuthenticated()
-                .and()
-                .formLogin()
-                .loginPage("/login")
-                .failureUrl("/login?error")
-                .usernameParameter("email")
-                .permitAll()
-                .and()
-                .logout()
-                .logoutUrl("/logout")
-                .deleteCookies("remember-me")
-                .logoutSuccessUrl("/")
-                .permitAll()
-                .and()
-                .rememberMe();
     }
 
 	public static void main(String[] args) {
