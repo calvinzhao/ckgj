@@ -26,9 +26,9 @@
 				is longer than the summary.</dd>
 		</dl>
 		<div class="pull-left">
-			<a href="messages" th:href="@{'/delete/' + ${message.id}}">
+			<a href="messages" th:href="@{'message/delete/' + ${message.id}}">
 				delete </a> | <a href="form.html"
-				th:href="@{'/modify/' + ${message.id}}"> modify </a>
+				th:href="@{'message/modify/' + ${message.id}}"> modify </a>
 		</div>
 	</div>
 </body>

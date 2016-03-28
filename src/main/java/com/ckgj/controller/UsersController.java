@@ -25,12 +25,6 @@ public class UsersController {
     private final UserCreateFormValidator userCreateFormValidator;
 
     @Autowired
-    public UsersController(UserService userService) {
-        this.userService = userService;
-        this.userCreateFormValidator = null;
-    }
-
-    @Autowired
     public UsersController(UserService userService, UserCreateFormValidator userCreateFormValidator) {
         this.userService = userService;
         this.userCreateFormValidator = userCreateFormValidator;

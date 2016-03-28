@@ -1,7 +1,5 @@
 package com.ckgj.models;
 
-import org.springframework.data.annotation.Id;
-
 import javax.persistence.*;
 
 

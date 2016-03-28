@@ -18,8 +18,8 @@ public class Login {
         return new ModelAndView("login", "error", error);
     }
 
-    @RequestMapping(name="/login", method=RequestMethod.POST)
-    public ModelAndView signin() {
-        return new ModelAndView("login");
-    }
+    //@RequestMapping(name="/login", method=RequestMethod.POST)
+    //public ModelAndView signin() {
+    //    return new ModelAndView("login");
+    //}
 }

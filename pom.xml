@@ -3,13 +3,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.tzgj</groupId>
-	<artifactId>demo</artifactId>
+	<groupId>com.ckgj</groupId>
+	<artifactId>pacioli</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>demo</name>
-	<description>Demo project for Spring Boot</description>
+	<name>pacioli</name>
+	<description>Project of CKGJ wechat service account.</description>
+	<url>https://github.com/calvinzhao/ckgj</url>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
