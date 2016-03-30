@@ -17,17 +17,23 @@ import java.util.Calendar;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.persistence.*;
+
 /**
  * @author Rob Winch
  */
+@Entity
+@Table(name = "message")
 public class Message {
-
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", nullable = false, updatable = false)
 	private Long id;
 
-	@NotEmpty(message = "Message is required.")
+	@Column(name = "email", nullable = false, unique = true)
 	private String text;
 
-	@NotEmpty(message = "Summary is required.")
+	@Column(name = "emaail", nullable = false, unique = true)
 	private String summary;
 
 	private Calendar created = Calendar.getInstance();

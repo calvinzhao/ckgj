@@ -9,20 +9,20 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 //http://kielczewski.eu/2014/12/spring-boot-security-application/
 @SpringBootApplication
 public class DemoApplication {
-    @Bean
-    public MessageRepository messageRepository() {
-        return new InMemoryMessageRepository();
-    }
+//    @Bean
+//    public MessageRepository messageRepository() {
+//        return new InMemoryMessageRepository();
+//    }
 
-    @Bean
-    public Converter<String, Message> messageConverter() {
-        return new Converter<String, Message>() {
-            @Override
-            public Message convert(String id) {
-                return messageRepository().findMessage(Long.valueOf(id));
-            }
-        };
-    }
+//    @Bean
+//    public Converter<String, Message> messageConverter() {
+//        return new Converter<String, Message>() {
+//            @Override
+//            public Message convert(String id) {
+//                return messageRepository().findMessage(Long.valueOf(id));
+//            }
+//        };
+//    }
 
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);

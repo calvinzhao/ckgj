@@ -14,18 +14,8 @@
 package com.ckgj;
 
 import com.ckgj.models.Message;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-/**
- * @author Rob Winch
- */
-public interface MessageRepository {
-
-	Iterable<Message> findAll();
-
-	Message save(Message message);
-
-	Message findMessage(Long id);
-
-	void deleteMessage(Long id);
+public interface MessageRepository extends JpaRepository<Message, Long> {
 
 }

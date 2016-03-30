@@ -24,33 +24,34 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Column(name="company_id")
-    private long companyId;
+    //@Column(name="company_id")
+    //private long companyId;
 
-    @ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
+
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="company_id")
-    private Company company;
+    private Message company;
 
     // getters, setters
-    public void setCompanyId(long companyId) {
-        this.companyId = companyId;
-    }
-
-    public long getCompanyId() {
-        return companyId;
-    }
+//    public void setCompanyId(long companyId) {
+//        this.companyId = companyId;
+//    }
+//
+//    public long getCompanyId() {
+//        return companyId;
+//    }
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    public Company getCompany() {
-        return company;
-    }
-
-    public void setCompany(Company company) {
-        this.company = company;
-    }
+//    public Company getCompany() {
+//        return company;
+//    }
+//
+//    public void setCompany(Company company) {
+//        this.company = company;
+//    }
 
     public void setEmail(String email) {
         this.email = email;
