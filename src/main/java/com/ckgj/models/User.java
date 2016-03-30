@@ -24,45 +24,16 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    //@Column(name="company_id")
-    //private long companyId;
-
-
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="company_id")
-    private Message company;
+    private Company company;
 
-    // getters, setters
-//    public void setCompanyId(long companyId) {
-//        this.companyId = companyId;
-//    }
-//
-//    public long getCompanyId() {
-//        return companyId;
-//    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public Company getCompany() {
+        return company;
     }
 
-//    public Company getCompany() {
-//        return company;
-//    }
-//
-//    public void setCompany(Company company) {
-//        this.company = company;
-//    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
+    public void setCompany(Company company) {
+        this.company = company;
     }
 
     public Long getId() {
@@ -70,16 +41,33 @@ public class User {
         return id;
     }
 
+    // getters, setters
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getEmail() {
         return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPasswordHash() {
         return passwordHash;
     }
 
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
     public Role getRole() {
         return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }
 

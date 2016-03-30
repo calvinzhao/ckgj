@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <title>创建公司</title>
+</head>
+<body>
+<h1 layout:fragment="header">创建公司</h1>
+<div layout:fragment="content" class="container">
+    <form id="companyForm" th:action="@{form}" th:object="${company}" action="#" method="post">
+        <div th:if="${#fields.hasErrors('*')}" class="alert alert-error">
+            <p th:each="error : ${#fields.errors('*')}" th:text="${error}">验证出错</p>
+        </div>
+        <div class="pull-right">
+            <a th:href="@{~/admin/company/}" href="company.html">查看全部</a>
+        </div>
+        <lable for="name">公司唯一id</lable>
+        <input type="text" th:field="*{id}" th:class="${#fields.hasErrors('id')} ? 'field-error'"/>
+        <label for="name">公司名</label>
+        <input type="text" th:field="*{name}" th:class="${#fields.hasErrors('name')} ? 'field-error'"/>
+        <label for="institutionCode">组织机构代码</label>
+        <input type="text" th:field="*{institutionCode}"
+               th:class="${#fields.hasErrors('institutionCode')} ? 'field-error'"/>
+        <div class="form-actions">
+            <input type="submit" value="Save"/>
+        </div>
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <title>公司信息</title>
+</head>
+<body>
+<h1 layout:fragment="header">公司信息</h1>
+<div layout:fragment="content" class="container">
+    <div class="alert alert-success" th:if="${globalMessage}"
+         th:text="${globalMessage}">Some Success message
+    </div>
+    <div class="pull-right">
+        <a th:href="@{/admin/company/}" href="list.html"> 公司列表 </a>
+    </div>
+    <dl>
+        <dt>ID</dt>
+        <dd id="id" th:text="${company.id}">123</dd>
+        <dt>创建日期</dt>
+        <dd id="created" th:text="${#calendars.format(company.dateCreated)}">Wed Mar 30 16:31:14 CST 2016</dd>
+        <dt>公司名称</dt>
+        <dd id="name" th:text="${company.name}">name</dd>
+        <dt>组织结构代码</dt>
+        <dd id="text" th:text="${company.institutionCode}">institution code</dd>
+    </dl>
+    <div class="pull-left">
+        <a href="messages" th:href="@{'/admin/company/delete/' + ${company.id}}"> 删除 </a> |
+        <a href="form.html" th:href="@{'/admin/company/modify/' + ${company.id}}"> 编辑 </a>
+    </div>
+</div>
+</body>
+</html>

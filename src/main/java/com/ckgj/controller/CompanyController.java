@@ -15,10 +15,9 @@ package com.ckgj.controller;
 
 import javax.validation.Valid;
 
-import com.ckgj.InMemoryMessageRepository;
-import com.ckgj.models.Message;
-import com.ckgj.MessageRepository;
+import com.ckgj.models.Company;
 
+import com.ckgj.services.company.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -29,45 +28,43 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-/**
- * @author Rob Winch
- * @author Doo-Hwan Kwak
- */
+
 @Controller
-@RequestMapping("/message")
-public class MessageController {
-	private final InMemoryMessageRepository messageRepository;
+@RequestMapping("/admin/company")
+public class CompanyController {
+	@Autowired
+	private final CompanyService companyService;
 
 	@Autowired
-	public MessageController(InMemoryMessageRepository messageRepository) {
-		this.messageRepository = messageRepository;
+	public CompanyController(CompanyService companyService) {
+		this.companyService = companyService;
 	}
 
 	@RequestMapping
 	public ModelAndView list() {
-		Iterable<Message> messages = this.messageRepository.findAll();
-		return new ModelAndView("messages/list", "messages", messages);
+		Iterable<Company> companies = this.companyService.findAll();
+		return new ModelAndView("company/list", "companies", companies);
 	}
 
 	@RequestMapping("{id}")
-	public ModelAndView view(@PathVariable("id") Message message) {
-		return new ModelAndView("messages/view", "message", message);
+	public ModelAndView view(@PathVariable("id") Company company) {
+		return new ModelAndView("company/view", "company", company);
 	}
 
 	@RequestMapping(value = "form", method = RequestMethod.GET)
-	public String createForm(@ModelAttribute Message message) {
-		return "messages/form";
+	public String createForm(@ModelAttribute Company company) {
+		return "company/form";
 	}
 
 	@RequestMapping(value="form", method = RequestMethod.POST)
-	public ModelAndView create(@Valid Message message, BindingResult result,
+	public ModelAndView create(@Valid Company company, BindingResult result,
 			RedirectAttributes redirect) {
 		if (result.hasErrors()) {
-			return new ModelAndView("messages/form", "formErrors", result.getAllErrors());
+			return new ModelAndView("company/form", "formErrors", result.getAllErrors());
 		}
-		message = this.messageRepository.save(message);
-		redirect.addFlashAttribute("globalMessage", "Successfully created a new message");
-		return new ModelAndView("redirect:message/{message.id}", "message.id", message.getId());
+		company = companyService.create(company);
+		redirect.addFlashAttribute("globalMessage", "Successfully created a new company");
+		return new ModelAndView("redirect:{company.id}", "company.id", company.getId());
 	}
 
 	@RequestMapping("foo")
@@ -77,14 +74,14 @@ public class MessageController {
 
 	@RequestMapping(value = "delete/{id}")
 	public ModelAndView delete(@PathVariable("id") Long id) {
-		this.messageRepository.deleteMessage(id);
-		Iterable<Message> messages = this.messageRepository.findAll();
-		return new ModelAndView("messages/list", "messages", messages);
+		this.companyService.deleteMessage(id);
+		Iterable<Company> companies = this.companyService.findAll();
+		return new ModelAndView("company/list", "companies", companies);
 	}
 
 	@RequestMapping(value = "modify/{id}", method = RequestMethod.GET)
-	public ModelAndView modifyForm(@PathVariable("id") Message message) {
-		return new ModelAndView("messages/form", "message", message);
+	public ModelAndView modifyForm(@PathVariable long id) {
+		return new ModelAndView("user", "user", companyService.findCompany(id));
 	}
 
 }

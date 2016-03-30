@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+	layout:decorator="layout">
+<head>
+<title>公司 : 浏览全部</title>
+</head>
+<body>
+	<h1 layout:fragment="header">公司 : 浏览全部</h1>
+	<div layout:fragment="content" class="container">
+		<div class="pull-right">
+			<a href="form.html" th:href="@{/admin/company/form}">添加</a>
+		</div>
+		<table class="table table-bordered table-striped">
+			<thead>
+				<tr>
+					<td>ID</td>
+					<td>名称</td>
+					<td>添加时间</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:if="${companies.empty}">
+					<td colspan="3">木有</td>
+				</tr>
+				<tr th:each="company : ${companies}">
+					<td th:text="${company.id}">1</td>
+					<td><a href="view.html" th:href="@{${company.id}}" th:text="${company.name}"> 苹果 </a></td>
+					<td th:text="${#calendars.format(company.dateCreated)}">
+						Wed Mar 30 16:31:14 CST 2016
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>
