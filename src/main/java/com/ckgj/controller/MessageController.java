@@ -15,6 +15,7 @@ package com.ckgj.controller;
 
 import javax.validation.Valid;
 
+import com.ckgj.InMemoryMessageRepository;
 import com.ckgj.models.Message;
 import com.ckgj.MessageRepository;
 
@@ -35,10 +36,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequestMapping("/message")
 public class MessageController {
-	private final MessageRepository messageRepository;
+	private final InMemoryMessageRepository messageRepository;
 
 	@Autowired
-	public MessageController(MessageRepository messageRepository) {
+	public MessageController(InMemoryMessageRepository messageRepository) {
 		this.messageRepository = messageRepository;
 	}
 
@@ -53,12 +54,12 @@ public class MessageController {
 		return new ModelAndView("messages/view", "message", message);
 	}
 
-	@RequestMapping(params = "form", method = RequestMethod.GET)
+	@RequestMapping(value = "form", method = RequestMethod.GET)
 	public String createForm(@ModelAttribute Message message) {
 		return "messages/form";
 	}
 
-	@RequestMapping(method = RequestMethod.POST)
+	@RequestMapping(value="form", method = RequestMethod.POST)
 	public ModelAndView create(@Valid Message message, BindingResult result,
 			RedirectAttributes redirect) {
 		if (result.hasErrors()) {

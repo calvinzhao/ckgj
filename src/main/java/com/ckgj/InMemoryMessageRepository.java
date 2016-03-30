@@ -17,6 +17,9 @@
 package com.ckgj;
 
 import com.ckgj.models.Message;
+import com.ckgj.services.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -25,36 +28,31 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * @author Dave Syer
  */
-public class InMemoryMessageRepository implements MessageRepository {
 
-	private static AtomicLong counter = new AtomicLong();
+@Service
+public class InMemoryMessageRepository {
+	@Autowired
+	private final MessageRepository messageRepository;
 
-	private final ConcurrentMap<Long, Message> messages = new ConcurrentHashMap<Long, Message>();
+	@Autowired
+	public InMemoryMessageRepository(MessageRepository userRepository) {
 
-	@Override
-	public Iterable<Message> findAll() {
-		return this.messages.values();
+		this.messageRepository = userRepository;
 	}
 
-	@Override
-	public Message save(Message message) {
-		Long id = message.getId();
-		if (id == null) {
-			id = counter.incrementAndGet();
-			message.setId(id);
-		}
-		this.messages.put(id, message);
-		return message;
-	}
-
-	@Override
 	public Message findMessage(Long id) {
-		return this.messages.get(id);
+		return this.messageRepository.getOne(id);
 	}
 
-	@Override
 	public void deleteMessage(Long id) {
-		this.messages.remove(id);
+		this.messageRepository.delete(id);
 	}
 
+	public Iterable<Message> findAll() {
+		return this.messageRepository.findAll();
+	}
+
+	public Message save(Message message) {
+		return this.messageRepository.saveAndFlush(message);
+	}
 }
