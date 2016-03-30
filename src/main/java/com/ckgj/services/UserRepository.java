@@ -2,9 +2,6 @@ package com.ckgj.services;
 
 import com.ckgj.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
-
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -13,7 +10,4 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findOneByEmail(String email);
-    //Optional<User> email();
-    //String findOneByEmail();
-    //List findAllByEmail();
 }
