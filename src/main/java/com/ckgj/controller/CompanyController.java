@@ -15,8 +15,9 @@ package com.ckgj.controller;
 
 import javax.validation.Valid;
 
-import com.ckgj.models.Company;
+import com.ckgj.models.company.Company;
 
+import com.ckgj.models.company.CompanyForm;
 import com.ckgj.services.company.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -52,36 +53,32 @@ public class CompanyController {
 	}
 
 	@RequestMapping(value = "form", method = RequestMethod.GET)
-	public String createForm(@ModelAttribute Company company) {
+	public String createForm(@ModelAttribute CompanyForm companyForm) {
 		return "company/form";
 	}
 
 	@RequestMapping(value="form", method = RequestMethod.POST)
-	public ModelAndView create(@Valid Company company, BindingResult result,
-			RedirectAttributes redirect) {
+	public ModelAndView create(@Valid CompanyForm companyForm, BindingResult result,
+							   RedirectAttributes redirect) {
 		if (result.hasErrors()) {
 			return new ModelAndView("company/form", "formErrors", result.getAllErrors());
 		}
-		company = companyService.create(company);
+		Company company = companyService.createOrUpdate(companyForm);
 		redirect.addFlashAttribute("globalMessage", "Successfully created a new company");
 		return new ModelAndView("redirect:{company.id}", "company.id", company.getId());
 	}
 
-	@RequestMapping("foo")
-	public String foo() {
-		throw new RuntimeException("Expected exception in controller");
-	}
-
 	@RequestMapping(value = "delete/{id}")
 	public ModelAndView delete(@PathVariable("id") Long id) {
-		this.companyService.deleteMessage(id);
+		this.companyService.deleteCompany(id);
 		Iterable<Company> companies = this.companyService.findAll();
 		return new ModelAndView("company/list", "companies", companies);
 	}
 
 	@RequestMapping(value = "modify/{id}", method = RequestMethod.GET)
 	public ModelAndView modifyForm(@PathVariable long id) {
-		return new ModelAndView("user", "user", companyService.findCompany(id));
+		CompanyForm companyForm = new CompanyForm(companyService.findCompany(id));
+		return new ModelAndView("company/form", "companyForm", companyForm);
 	}
 
 }

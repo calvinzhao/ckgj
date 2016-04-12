@@ -1,6 +1,6 @@
-package com.ckgj.services;
+package com.ckgj.services.user;
 
-import com.ckgj.models.User;
+import com.ckgj.models.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
@@ -9,5 +9,5 @@ import java.util.Optional;
  */
 
 public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findOneByEmail(String email);
+    Optional<User> findOneByPhone(String phone);
 }

@@ -1,6 +1,10 @@
-package com.ckgj.models;
+package com.ckgj.models.user;
+
+import com.ckgj.models.Role;
+import com.ckgj.models.company.Company;
 
 import javax.persistence.*;
+import java.util.Date;
 
 
 /**
@@ -14,11 +18,36 @@ public class User {
     @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 
-    @Column(name = "email", nullable = false, unique = true)
-    private String email;
+    @Column(name = "phone", nullable = false, unique = true)
+    private String phone;
 
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
+
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+    public Date getDateCreated() {
+
+        return dateCreated;
+    }
+
+    @Column(name = "date_created")
+    @Temporal(TemporalType.TIMESTAMP)
+    private java.util.Date dateCreated;
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+
+        return name;
+    }
+
+    @Column(name = "name", nullable = false)
+    private String name;
 
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -46,12 +75,12 @@ public class User {
         this.id = id;
     }
 
-    public String getEmail() {
-        return email;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getPasswordHash() {

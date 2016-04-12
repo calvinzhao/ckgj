@@ -2,15 +2,15 @@
       xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
       layout:decorator="layout">
 <head>
-    <title>Messages : View</title>
+    <title>浏览用户</title>
 </head>
 <body>
-<h1 layout:fragment="header">Messages : Create</h1>
+<h1 layout:fragment="header">浏览用户</h1>
 <div layout:fragment="content" class="container">
     <div class="alert alert-success" th:if="${globalMessage}"
          th:text="${globalMessage}">Some Success message</div>
     <div class="pull-right">
-        <a th:href="@{/}" href="list.html"> Messages </a>
+        <a th:href="@{/}" href="users.html"> 用户列表 </a>
     </div>
     <dl>
         <dt>ID</dt>

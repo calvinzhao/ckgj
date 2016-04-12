@@ -1,6 +1,6 @@
-package com.ckgj.services;
+package com.ckgj.services.user;
 
-import com.ckgj.models.UserCreateForm;
+import com.ckgj.models.user.UserForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -22,24 +22,25 @@ public class UserCreateFormValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return clazz.equals(UserCreateForm.class);
+        return clazz.equals(UserForm.class);
     }
 
     @Override
     public void validate(Object target, Errors errors) {
-        UserCreateForm form = (UserCreateForm) target;
+        UserForm form = (UserForm) target;
         validatePasswords(errors, form);
-        validateEmail(errors, form);
+        validatePhone(errors, form);
     }
 
-    private void validatePasswords(Errors errors, UserCreateForm form) {
+    private void validatePasswords(Errors errors, UserForm form) {
         if (!form.getPassword().equals(form.getPasswordRepeated())) {
             errors.reject("password.no_match", "Passwords do not match");
         }
     }
 
-    private void validateEmail(Errors errors, UserCreateForm form) {
-        if (userService.getUserByEmail(form.getEmail()).isPresent()) {
+    private void validatePhone(Errors errors, UserForm form) {
+        // TODO: validate phone number
+        if (userService.getUserByPhone(form.getPhone()).isPresent()) {
             errors.reject("email.exists", "User with this email already exists");
         }
     }

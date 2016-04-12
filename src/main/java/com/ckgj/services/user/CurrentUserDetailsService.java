@@ -1,7 +1,7 @@
-package com.ckgj.services;
+package com.ckgj.services.user;
 
-import com.ckgj.models.CurrentUser;
-import com.ckgj.models.User;
+import com.ckgj.models.user.CurrentUser;
+import com.ckgj.models.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,7 +22,7 @@ public class CurrentUserDetailsService implements UserDetailsService {
 
     @Override
     public CurrentUser loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userService.getUserByEmail(email)
+        User user = userService.getUserByPhone(email)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format("User with email=%s was not found", email)));
         return new CurrentUser(user);
     }

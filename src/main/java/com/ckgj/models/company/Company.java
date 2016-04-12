@@ -1,4 +1,4 @@
-package com.ckgj.models;
+package com.ckgj.models.company;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -13,25 +13,23 @@ public class Company {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, updatable = false)
     private Long id;
-    @Column(name="name")
+    @Column(name = "name")
     private String name;
-    @Column(name="employee_cnt")
+    @Column(name = "employee_cnt")
     private int employeeCnt = 0;
-
-    public void setInstitutionCode(String institutionCode) {
-        this.institutionCode = institutionCode;
-    }
+    @Column(name = "institution_code")
+    private String institutionCode;
+    @Column(name = "date_created")
+    @Temporal(TemporalType.TIMESTAMP)
+    private java.util.Date dateCreated;
 
     public String getInstitutionCode() {
 
         return institutionCode;
     }
 
-    @Column(name="institution_code")
-    private String institutionCode;
-
-    public void setDateCreated(Date dateCreated) {
-        this.dateCreated = dateCreated;
+    public void setInstitutionCode(String institutionCode) {
+        this.institutionCode = institutionCode;
     }
 
     public Date getDateCreated() {
@@ -39,9 +37,9 @@ public class Company {
         return dateCreated;
     }
 
-    @Column(name="date_created")
-    @Temporal(TemporalType.TIMESTAMP)
-    private java.util.Date dateCreated;
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
+    }
 
     public Long getId() {
         return id;

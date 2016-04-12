@@ -22,6 +22,8 @@
         <dd id="name" th:text="${company.name}">name</dd>
         <dt>组织结构代码</dt>
         <dd id="text" th:text="${company.institutionCode}">institution code</dd>
+        <dt>公司成员数量</dt>
+        <dd id="employeeCnt" th:text="${company.employeeCnt}">employee count</dd>
     </dl>
     <div class="pull-left">
         <a href="messages" th:href="@{'/admin/company/delete/' + ${company.id}}"> 删除 </a> |

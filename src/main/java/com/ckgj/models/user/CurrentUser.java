@@ -1,5 +1,7 @@
-package com.ckgj.models;
+package com.ckgj.models.user;
 
+import com.ckgj.models.Role;
+import com.ckgj.models.user.User;
 import org.springframework.security.core.authority.AuthorityUtils;
 
 /**
@@ -11,7 +13,7 @@ public class CurrentUser extends org.springframework.security.core.userdetails.U
     private User user;
 
     public CurrentUser(User user) {
-        super(user.getEmail(), user.getPasswordHash(), AuthorityUtils.createAuthorityList(user.getRole().toString()));
+        super(user.getPhone(), user.getPasswordHash(), AuthorityUtils.createAuthorityList(user.getRole().toString()));
         this.user = user;
     }
 
