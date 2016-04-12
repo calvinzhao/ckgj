@@ -60,7 +60,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(Long id) {
-        userRepository.delete(id);
+        User user = userRepository.findOne(id);
+        Company company = user.getCompany();
+        companyService.updateEmployeeCnt(company, -1);
+        userRepository.delete(user);
     }
 
     @Override

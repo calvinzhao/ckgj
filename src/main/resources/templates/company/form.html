@@ -18,9 +18,9 @@
         <lable for="name">公司唯一id</lable>
         <input type="text" th:field="*{id}" readonly="readonly" th:class="${#fields.hasErrors('id')} ? 'field-error'"/>
         <label for="name">公司名</label>
-        <input type="text" th:field="*{name}" th:class="${#fields.hasErrors('name')} ? 'field-error'"/>
+        <input id="name" type="text" th:field="*{name}" th:class="${#fields.hasErrors('name')} ? 'field-error'"/>
         <label for="institutionCode">组织机构代码</label>
-        <input type="text" th:field="*{institutionCode}"
+        <input id="institutionCode" type="text" th:field="*{institutionCode}"
                th:class="${#fields.hasErrors('institutionCode')} ? 'field-error'"/>
         <div class="form-actions">
             <input type="submit" value="Save"/>

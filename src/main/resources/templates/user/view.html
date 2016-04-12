@@ -8,27 +8,28 @@
 <h1 layout:fragment="header">浏览用户</h1>
 <div layout:fragment="content" class="container">
     <div class="alert alert-success" th:if="${globalMessage}"
-         th:text="${globalMessage}">Some Success message</div>
+         th:text="${globalMessage}">Some Success message
+    </div>
     <div class="pull-right">
-        <a th:href="@{/}" href="users.html"> 用户列表 </a>
+        <a th:href="@{/admin/user/}" href="users.html"> 用户列表 </a>
     </div>
     <dl>
         <dt>ID</dt>
-        <dd id="id" th:text="${message.id}">123</dd>
-        <dt>Date</dt>
-        <dd id="created" th:text="${#calendars.format(message.created)}">
-            July 11, 2012 2:17:16 PM CDT</dd>
-        <dt>Summary</dt>
-        <dd id="summary" th:text="${message.summary}">A short summary...
-        </dd>
-        <dt>Message</dt>
-        <dd id="text" th:text="${message.text}">A detailed message that
-            is longer than the summary.</dd>
+        <dd id="id" th:text="${user.id}">123</dd>
+        <dt>创建日期</dt>
+        <dd id="created" th:text="${#calendars.format(user.dateCreated)}">July 11, 2012 2:17:16 PM CDT</dd>
+        <dt>姓名</dt>
+        <dd id="name" th:text="${user.name}">Calvin</dd>
+        <dt>手机</dt>
+        <dd id="phone" th:text="${user.phone}">110</dd>
+        <dt>公司</dt>
+        <dd id="company" th:text="${user.getCompany().name}">papaya</dd>
+        <dt>角色</dt>
+        <dd id="role" th:text="${user.isAdmin()} ? '管理员' : '普通员工'">papaya</dd>
     </dl>
     <div class="pull-left">
-        <a href="messages" th:href="@{'/delete/' + ${message.id}}">
-            delete </a> | <a href="form.html"
-                             th:href="@{'/modify/' + ${message.id}}"> modify </a>
+        <a href="messages" th:href="@{'/admin/user/delete/' + ${user.id}}"> 删除 </a> |
+        <a href="form.html" th:href="@{'/admin/user/modify/' + ${user.id}}"> 编辑 </a>
     </div>
 </div>
 </body>

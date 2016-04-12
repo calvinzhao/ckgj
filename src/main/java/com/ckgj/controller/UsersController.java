@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -88,6 +89,8 @@ public class UsersController {
     @RequestMapping(value = "modify/{id}", method = RequestMethod.GET)
     public ModelAndView modifyForm(@PathVariable long id) {
         UserForm userForm = new UserForm(userService.getUserById(id).orElseThrow(() -> new NoSuchElementException(String.format("User=%s not found", id))));
-        return new ModelAndView("user/user_create", "userForm", userForm);
+        ModelAndView modelAndView = new ModelAndView("user/user_create", "userForm", userForm);
+        modelAndView.addObject("companies", companyService.findAll());
+        return modelAndView;
     }
 }
