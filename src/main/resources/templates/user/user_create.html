@@ -8,7 +8,7 @@
 <body>
 <h1 layout:fragment="header">User : Create</h1>
 <div layout:fragment="content" class="container">
-    <form id="form" th:action="@{create}" th:object="${userForm}" method="post">
+    <form id="form" th:action="@{/admin/user/create}" th:object="${userForm}" method="post">
         <div th:if="${#fields.hasErrors('*')}" class="alert alert-error">
             <p th:each="error : ${#fields.errors('*')}" th:text="${error}">验证出错</p>
         </div>
