@@ -1,7 +1,7 @@
 package com.ckgj.models.user;
 
-import com.ckgj.models.Role;
 import com.ckgj.models.company.Company;
+import com.ckgj.models.wxuser.WxUser;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -23,22 +23,28 @@ public class User {
 
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
-
-    public void setDateCreated(Date dateCreated) {
-        this.dateCreated = dateCreated;
-    }
+    @Column(name = "date_created")
+    @Temporal(TemporalType.TIMESTAMP)
+    private java.util.Date dateCreated;
+    @Column(name = "name", nullable = false)
+    private String name;
+    @Column(name = "role", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Role role;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="company_id")
+    private Company company;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="wxuser_id")
+    private WxUser wxUser;
 
     public Date getDateCreated() {
 
         return dateCreated;
     }
 
-    @Column(name = "date_created")
-    @Temporal(TemporalType.TIMESTAMP)
-    private java.util.Date dateCreated;
-
-    public void setName(String name) {
-        this.name = name;
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
     }
 
     public String getName() {
@@ -46,16 +52,17 @@ public class User {
         return name;
     }
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    @Column(name = "role", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    public WxUser getWxUser() {
+        return wxUser;
+    }
 
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="company_id")
-    private Company company;
+    public void setWxUser(WxUser wxUser) {
+        this.wxUser = wxUser;
+    }
 
     public Company getCompany() {
         return company;
@@ -101,6 +108,15 @@ public class User {
 
     public boolean isAdmin() {
         return role == Role.ADMIN;
+    }
+
+    public String getWxNickname() {
+        WxUser wxuser = getWxUser();
+        if (wxuser != null) {
+            return wxuser.getNickname();
+        } else {
+            return "__未绑定__";
+        }
     }
 }
 

@@ -1,9 +1,10 @@
 package com.ckgj.services.user;
 
-import com.ckgj.models.Role;
+import com.ckgj.models.user.Role;
 import com.ckgj.models.company.Company;
 import com.ckgj.models.user.User;
 import com.ckgj.models.user.UserForm;
+import com.ckgj.models.wxuser.WxUser;
 import com.ckgj.services.company.CompanyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +41,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> getUserByPhone(String phone) {
         if (phone.contains("dai")) {
+            // TODO delete debug code
             User u = new User();
             u.setPhone("dai@qq.com");
             u.setPasswordHash(new BCryptPasswordEncoder().encode("h"));
@@ -86,5 +88,18 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
+    @Override
+    public User bindWxUser(User user, WxUser wxUser) {
+        user.setWxUser(wxUser);
+        return userRepository.save(user);
+    }
 
+    @Override
+    public Optional<User> validUser(String phone, String password) {
+        Optional<User> user = getUserByPhone(phone);
+        if (user.isPresent() && user.get().getPasswordHash() == new BCryptPasswordEncoder().encode(password)){
+            return user;
+        } else
+            return Optional.empty();
+    }
 }

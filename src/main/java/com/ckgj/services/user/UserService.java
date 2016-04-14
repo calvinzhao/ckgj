@@ -2,6 +2,7 @@ package com.ckgj.services.user;
 
 import com.ckgj.models.user.User;
 import com.ckgj.models.user.UserForm;
+import com.ckgj.models.wxuser.WxUser;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -21,4 +22,8 @@ public interface UserService {
     User createOrUpdate(UserForm form);
 
     void deleteUser(Long id);
+
+    User bindWxUser(User user, WxUser wxUser);
+
+    Optional<User> validUser(String phone, String password);
 }

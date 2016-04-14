@@ -1,7 +1,5 @@
 package com.ckgj.models.user;
 
-import com.ckgj.models.Role;
-import com.ckgj.models.user.User;
 import org.springframework.security.core.authority.AuthorityUtils;
 
 /**

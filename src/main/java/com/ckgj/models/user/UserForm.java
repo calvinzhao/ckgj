@@ -1,6 +1,5 @@
 package com.ckgj.models.user;
 
-import com.ckgj.models.Role;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;

@@ -1,4 +1,4 @@
-package com.ckgj.models;
+package com.ckgj.models.user;
 
 /**
  * Created by calvin on 3/25/16.

@@ -26,6 +26,8 @@
         <dd id="company" th:text="${user.getCompany().name}">papaya</dd>
         <dt>角色</dt>
         <dd id="role" th:text="${user.isAdmin()} ? '管理员' : '普通员工'">papaya</dd>
+        <dt>微信</dt>
+        <dd id="wx" th:text="${user.getWxNickname()}">papaya</dd>
     </dl>
     <div class="pull-left">
         <a href="messages" th:href="@{'/admin/user/delete/' + ${user.id}}"> 删除 </a> |
