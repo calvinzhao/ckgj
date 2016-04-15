@@ -1,2 +1,47 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <script type="text/javascript" src="/js/jquery-1.7.2.js"></script>
+    <script type="text/javascript">
+        var bind = function() {
+            var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+    var headers = {};
+    headers[header] = token;
+    var data = {};
+    data["phone"] = $("#phone").attr("value");
+    data["password"] = $("#password").attr("value");
+    $.ajax({
+        url: "/wechat/bind",
+        type: "POST",
+        data: data,
+        dataType:'json',
+        headers: headers,
+        error: function(xhr, status, error) {
+            $("#errorMsg").text(JSON.parse(xhr.responseText).message);
+        },
+        success: function(data, status, xhr) {
+            alert(data);
+        }
+    });
+        }
 
-http://stackoverflow.com/questions/27182081/spring-security-csrf-token-not-working-with-ajax-call-form-submit-in-same-jsp
+    </script>
+</head>
+<body>
+<div id="errorMsg" th:if="${error != null}" class="alert alert-error">
+    <p th:text="${error}">出错</p>
+</div>
+<div>
+    <label for="phone">手机</label>
+    <input id="phone" name="phone" type="text"/>
+    <label for="password">密码</label>
+    <input id="password" name="password" type="password"/>
+    <input id="bind" name="bind" onclick="bind()" type="button" value="绑定"/>
+</div>
+</body>
+</html>

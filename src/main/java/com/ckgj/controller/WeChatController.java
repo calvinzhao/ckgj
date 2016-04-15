@@ -5,6 +5,8 @@ import com.ckgj.models.wxuser.WxOauthState;
 import com.ckgj.models.wxuser.WxUser;
 import com.ckgj.services.user.UserService;
 import com.ckgj.services.wechat.WeChatService;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -37,7 +41,7 @@ public class WeChatController {
     @RequestMapping(value = "home")
     public String homePage(@CookieValue(OPEN_ID_COOKIE) Optional<String> openId, Model model) {
         // step 3 用户用手机，密码登录，验证成功则绑定用户
-        // TODO
+        // TODO ? can get attr from bind redirect
         if (!openId.isPresent()) {
             return "redirect:" + weChatService.getOauth2Url();
         }
@@ -54,15 +58,21 @@ public class WeChatController {
         return "wechat/home";
     }
 
-    // 返回json https://spring.io/guides/gs/actuator-service/
     @RequestMapping(value = "bind", method = RequestMethod.POST)
+    @ResponseBody
     public String bindWeChat(@RequestParam(name="phone") String phone, @RequestParam(name="password") String password,
                                    @CookieValue(OPEN_ID_COOKIE) Optional<String> openId, RedirectAttributes attr) {
         // step 3 用户用手机，密码登录，验证成功则绑定用户
         // 用户验证失败或已经绑定其它用户,弹警告窗
         // 没有找到wxuser,openid不存在活着有错,重新微信登陆
+
         if (!openId.isPresent()) {
-            return "redirect:" + weChatService.getOauth2Url();
+            Map<String, String> m = new HashMap<>();
+            m.put("url", weChatService.getOauth2Url());
+            // return weChatService.getOauth2Url();
+            Gson gson = new Gson();
+
+            return gson.toJson(m);
         }
         User user = userService.validUser(phone, password).orElseThrow(() -> new IllegalArgumentException("user not exist or password is wrong."));
         try {
@@ -71,9 +81,9 @@ public class WeChatController {
             attr.addAttribute("user_company", user.getCompany());
             attr.addAttribute("user_phone", user.getPhone());
         } catch (NoSuchElementException e) {
-            return "redirect:" + weChatService.getOauth2Url(WxOauthState.RELOGIN_STATE);
+            return weChatService.getOauth2Url(WxOauthState.RELOGIN_STATE);
         }
-        return "redirect:/wechat/home";
+        return "/wechat/home";
     }
 
     @RequestMapping("login")
@@ -82,7 +92,8 @@ public class WeChatController {
         // 若成功返回登陆页面或用户主页
         WxUser wxUser;
         if (!code.isPresent()) {
-            throw new IllegalArgumentException("login error");
+            return new ModelAndView("wechat/login", "error", "no user");
+            // throw new IllegalArgumentException("login error");
         }
         try {
             wxUser = weChatService.createOrGetWxUser(code.get());
@@ -106,7 +117,8 @@ public class WeChatController {
     }
 
     @RequestMapping("oauth2")
-    public @ResponseBody String oauth2Url() {
+    @ResponseBody
+    public String oauth2Url() {
         // step 1 微信oauth2链接
         return weChatService.getOauth2Url();
     }
