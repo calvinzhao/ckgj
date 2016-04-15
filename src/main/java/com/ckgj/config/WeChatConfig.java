@@ -3,12 +3,12 @@ package com.ckgj.config;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 // TODO: use application.properities
-@ConfigurationProperties
+@ConfigurationProperties(prefix = "wechat")
 public class WeChatConfig {
-    private String wxAppId;
-    private String wxSecret;
-    private String wxToken;
-    private String wxAesKey;
+    private String wxAppId; // wx70c01952742520c8
+    private String wxSecret; // de544884eddf11c62af7d2bf0367d40e
+    private String wxToken; // hosme
+    private String wxAesKey; // hrL6SlnhZJINCEZDAJlHkxKJdFDvVPhQzibe04F7Aul
     private String redirectUrl;
 
     public String getRedirectUrl() {

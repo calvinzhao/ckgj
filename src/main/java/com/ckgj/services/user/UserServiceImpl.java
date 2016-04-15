@@ -97,7 +97,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> validUser(String phone, String password) {
         Optional<User> user = getUserByPhone(phone);
-        if (user.isPresent() && user.get().getPasswordHash() == new BCryptPasswordEncoder().encode(password)){
+        if (user.isPresent() && new BCryptPasswordEncoder().matches(password, user.get().getPasswordHash())) {
             return user;
         } else
             return Optional.empty();

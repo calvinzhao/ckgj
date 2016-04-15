@@ -2,6 +2,7 @@ package com.ckgj.services.wechat;
 
 import com.ckgj.config.WeChatConfig;
 import com.ckgj.models.user.User;
+import com.ckgj.models.wxuser.WxOauthState;
 import com.ckgj.models.wxuser.WxUser;
 import com.ckgj.services.user.UserService;
 import me.chanjar.weixin.common.api.WxConsts;
@@ -34,7 +35,6 @@ public class WeChatService {
 
     @Autowired
     public WeChatService(WeChatConfig weChatConfig, WxUserRepository wxUserRepository, UserService userService) {
-        logger.info("+++++++++++++++++++++++++init wechatservice" + weChatConfig);
         this.weChatConfig = weChatConfig;
         this.wxUserRepository = wxUserRepository;
         this.userService = userService;
@@ -43,17 +43,17 @@ public class WeChatService {
         config.setSecret(weChatConfig.getWxSecret());
         config.setToken(weChatConfig.getWxToken());
         config.setAesKey(weChatConfig.getWxAesKey());
-//        config.setAppId("wx70c01952742520c8"); // 设置微信公众号的appid
-//        config.setSecret("de544884eddf11c62af7d2bf0367d40e"); // 设置微信公众号的app corpSecret
-//        config.setToken(""); // 设置微信公众号的token
-//        config.setAesKey(""); // 设置微信公众号的EncodingAESKey
 
         wxMpService = new WxMpServiceImpl();
         wxMpService.setWxMpConfigStorage(config);
     }
 
     public String getOauth2Url() {
-        return wxMpService.oauth2buildAuthorizationUrl(weChatConfig.getRedirectUrl(), WxConsts.OAUTH2_SCOPE_USER_INFO, "123");
+        return wxMpService.oauth2buildAuthorizationUrl(weChatConfig.getRedirectUrl(), WxConsts.OAUTH2_SCOPE_USER_INFO, WxOauthState.NORMAL_STATE);
+    }
+
+    public String getOauth2Url(String state) {
+        return wxMpService.oauth2buildAuthorizationUrl(weChatConfig.getRedirectUrl(), WxConsts.OAUTH2_SCOPE_USER_INFO, state);
     }
 
     public WxMpUser getWxMpUser(String code) throws WxErrorException {
@@ -103,8 +103,8 @@ public class WeChatService {
         WxUser wxUser = getWxUserByOpenId(openId).orElseThrow(() -> new NoSuchElementException("[ERROR] WHEN GET WxUser BY OPENID " + openId));
         if (wxUser.getUser() != null) {
             if (wxUser.getUser().getId() != user.getId()) {
-                throw new InvalidParameterException(String.format("[ERROR] TRY DOUBLE BIND TO openid=%s, old_user_id=%s, new_user_id=%s",
-                        openId, wxUser.getUser().getId(), user.getId()));
+                throw new IllegalArgumentException(String.format("[ERROR] already bind to user(phone: %s)",
+                        wxUser.getUser().getPhone()));
             } else {
                 return user;
             }

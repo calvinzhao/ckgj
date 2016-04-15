@@ -40,7 +40,7 @@ public class UserCreateFormValidator implements Validator {
 
     private void validatePhone(Errors errors, UserForm form) {
         // TODO: validate phone number
-        if (userService.getUserByPhone(form.getPhone()).isPresent()) {
+        if (form.getId() == 0 && userService.getUserByPhone(form.getPhone()).isPresent()) {
             errors.reject("phone.exists", "User with this phone already exists");
         }
     }

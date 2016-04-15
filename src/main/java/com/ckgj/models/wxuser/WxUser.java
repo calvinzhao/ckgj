@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "user")
+@Table(name = "wx_user")
 public class WxUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
