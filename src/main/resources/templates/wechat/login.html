@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Getting Started: Serving Web Content</title>
+    <title>绑定账号</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
@@ -9,31 +9,36 @@
     <script type="text/javascript">
         var bind = function() {
             var token = $("meta[name='_csrf']").attr("content");
-    var header = $("meta[name='_csrf_header']").attr("content");
-    var headers = {};
-    headers[header] = token;
-    var data = {};
-    data["phone"] = $("#phone").attr("value");
-    data["password"] = $("#password").attr("value");
-    $.ajax({
-        url: "/wechat/bind",
-        type: "POST",
-        data: data,
-        dataType:'json',
-        headers: headers,
-        error: function(xhr, status, error) {
-            $("#errorMsg").text(JSON.parse(xhr.responseText).message);
-        },
-        success: function(data, status, xhr) {
-            alert(data);
+            var header = $("meta[name='_csrf_header']").attr("content");
+            var headers = {};
+            headers[header] = token;
+            var data = {};
+            data["phone"] = $("#phone").attr("value");
+            data["password"] = $("#password").attr("value");
+            $.ajax({
+                url: "/wechat/bind",
+                type: "POST",
+                data: data,
+                dataType:'json',
+                headers: headers,
+                error: function(xhr, status, error) {
+                    $("div#errorMsg").css("display", "block");
+                    $("div#errorMsg p").text(JSON.parse(xhr.responseText).message);
+                },
+                success: function(data, status, xhr) {
+                    $("div#errorMsg").css("display", "none");
+                    var url = data.url;
+                    if (data.cdr == "false") {
+                        url = window.location.origin + url;
+                    }
+                    $(window.location).attr("href", url);
+                }
+            });
         }
-    });
-        }
-
     </script>
 </head>
 <body>
-<div id="errorMsg" th:if="${error != null}" class="alert alert-error">
+<div id="errorMsg" class="alert alert-error" th:style="${error} ? 'display:block' : 'display:none'">
     <p th:text="${error}">出错</p>
 </div>
 <div>
