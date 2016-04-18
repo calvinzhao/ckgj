@@ -17,7 +17,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.security.InvalidParameterException;
 import java.util.Date;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -99,7 +98,7 @@ public class WeChatService {
         }
     }
 
-    public User bindUser(String openId, User user) throws NoSuchElementException, InvalidParameterException {
+    public User bindUser(String openId, User user) throws NoSuchElementException, IllegalArgumentException {
         WxUser wxUser = getWxUserByOpenId(openId).orElseThrow(() -> new NoSuchElementException("[ERROR] WHEN GET WxUser BY OPENID " + openId));
         if (wxUser.getUser() != null) {
             if (wxUser.getUser().getId() != user.getId()) {

@@ -32,7 +32,6 @@ public class CompanyService {
 
     public Company createOrUpdate(CompanyForm companyForm) {
         Company company;
-        //TODO: test
         if (companyForm.getId() > 0) {
             // update old one
             company = companyRepository.findOne(companyForm.getId());

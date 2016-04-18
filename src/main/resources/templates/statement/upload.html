@@ -8,23 +8,50 @@
 <body>
 <h1 layout:fragment="header">上传报表</h1>
 <div layout:fragment="content" class="container">
-    <form id="companyForm" th:action="@{/admin/statement/upload}" th:object="${companyForm}" action="#" enctype="multipart/form-data" method="post">
-        <div th:if="${#fields.hasErrors('*')}" class="alert alert-error">
-            <p th:each="error : ${#fields.errors('*')}" th:text="${error}">验证出错</p>
-        </div>
-        <div class="pull-right">
-            <a th:href="@{~/admin/company/}" href="company.html">查看全部</a>
-        </div>
-        <label for="companyId">公司</label>
-        <select name="companyId" id="companyId" th:field="*{companyId}">
-            <option th:each="company: ${companies}" th:value="${company.id}" th:text="${company.name}">company name</option>
-        </select>
-        <label for="file">公司</label>
-        <input type="file" id="file" name="file" />
-        <div class="form-actions">
-            <input type="submit" value="Upload"/>
-        </div>
-    </form>
+    <div>
+        <form id="companyForm" th:action="@{/admin/statement/upload}" action="#" enctype="multipart/form-data"
+              method="post">
+            <div th:if="${message}" class="alert alert-error">
+                <h2 th:text="${message}"/>
+            </div>
+            <div class="pull-right" th:if="${statementId}">
+                <a th:href="@{~/admin/statement/edit/{id}(id=${statementId})}" href="view.html">浏览编辑</a>
+            </div>
+            <label for="companyId">公司</label>
+            <select name="companyId" id="companyId" th:value="${companyId}">
+                <option th:each="company: ${companies}" th:value="${company.id}" th:text="${company.name}">company
+                    name
+                </option>
+            </select>
+            <label>报告期</label>
+            <select name="year" id="year">
+                <option value="2016">2016</option>
+                <option value="2017">2017</option>
+                <option value="2018">2018</option>
+                <option value="2019">2019</option>
+                <option value="2020">2020</option>
+            </select>
+            <select name="month" id="month">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select>
+            <label for="file">报表</label>
+            <input type="file" id="file" name="file"/>
+            <div class="form-actions">
+                <input type="submit" value="Upload"/>
+            </div>
+        </form>
+    </div>
 </div>
 </body>
 </html>
