@@ -9,15 +9,6 @@
 <p th:text="'你好, ' + ${user_name} + '(' + ${user_phone} + ')!'" />
 <p th:text="'公司：' + ${user_company}" />
 
-<tr th:each="sheet : ${sheets}">
-    <td th:text="${sheet.id}">1</td>
-    <td th:text="${sheet.companyName}">1</td>
-    <td><a href="edit.html" th:href="@{/admin/statement/edit/{id}(id=${sheet.id})}" th:text="${sheet.period}">
-        2016-01 </a></td>
-    <td th:text="${#calendars.format(sheet.dateCreated)}">
-        Wed Mar 30 16:31:14 CST 2016
-    </td>
-</tr>
 <div>
     <p th:each="sheet : ${sheets}">
         <a href="edit.html" th:href="@{/wechat/report/{id}(id=${sheet.id})}" th:text="'第 ' + ${sheet.period} + ' 期报告'">2016-01</a>
