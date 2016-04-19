@@ -127,6 +127,7 @@ public class WeChatController {
             retView = new ModelAndView("wechat/home", "user_name", user.getName());
             retView.addObject("user_phone", user.getPhone());
             retView.addObject("user_company", user.getCompany().getName());
+            retView.addObject("sheets", weChatService.mySheets(user));
         } else {
             retView = new ModelAndView("wechat/login");
         }
