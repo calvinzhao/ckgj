@@ -1,5 +1,6 @@
 package com.ckgj.models.statement;
 
+import javax.validation.constraints.NotNull;
 import java.util.Comparator;
 import java.util.Date;
 
@@ -10,12 +11,15 @@ public class StatementSheet {
         public int compare(StatementSheet sheet1, StatementSheet sheet2) {
             Integer i1 = sheet1.period.getYear() * 100 + sheet1.period.getMonth();
             Integer i2 = sheet2.period.getYear() * 100 + sheet2.period.getMonth();
-            return i1.compareTo(i2);
+            return -i1.compareTo(i2);
         }
     };
 
+    @NotNull
     private Long id;
     private String companyName;
+    private Long companyId;
+    private Date dateCreated;
     private Period period;
     private Float cash;
     private Float bankAccount;
@@ -55,11 +59,33 @@ public class StatementSheet {
         liability = statement.getLiability();
         equity = statement.getEquity();
         companyName = statement.getCompany().getName();
+        companyId = statement.getCompany().getId();
+        dateCreated = statement.getDateCreated();
         period = new Period(statement.getPeriod());
+    }
+
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
+    }
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getCompanyName() {

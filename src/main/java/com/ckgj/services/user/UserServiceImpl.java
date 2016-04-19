@@ -89,7 +89,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User bindWxUser(User user, WxUser wxUser) {
+    public User bindWxUser(User user, WxUser wxUser) throws IllegalArgumentException {
+        if (user.getWxUser() != null) {
+            if (user.getWxUser().getId() != wxUser.getId()) {
+                throw new IllegalArgumentException(String.format("[ERROR] the user already bind to another wxuser(nick: %s)",
+                        wxUser.getNickname()));
+            } else {
+                return user;
+            }
+        }
         user.setWxUser(wxUser);
         return userRepository.save(user);
     }

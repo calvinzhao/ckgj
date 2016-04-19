@@ -1,5 +1,8 @@
 package com.ckgj.controller;
 
+import com.ckgj.models.MyBadRequestException;
+import com.ckgj.models.MyForbiddenException;
+import com.ckgj.models.statement.StatementSheet;
 import com.ckgj.models.user.User;
 import com.ckgj.models.wxuser.WxOauthState;
 import com.ckgj.models.wxuser.WxUser;
@@ -55,7 +58,23 @@ public class WeChatController {
         model.addAttribute("user_name", user.getName());
         model.addAttribute("user_phone", user.getPhone());
         model.addAttribute("user_company", user.getCompany().getName());
+        model.addAttribute("sheets", weChatService.mySheets(user));
         return "wechat/home";
+    }
+
+    @RequestMapping(value = "report/{statementId}")
+    public String report(@CookieValue(value = OPEN_ID_COOKIE) Optional<String> openId, @PathVariable("statementId") Long statementId, Model model) {
+//        if (!openId.isPresent()) {
+//            return "redirect:" + weChatService.getOauth2Url();
+//        }
+        model.addAttribute("statementId", statementId);
+        return "wechat/report";
+    }
+
+    @RequestMapping(value = "sheet_json", method = RequestMethod.POST)
+    @ResponseBody
+    public StatementSheet sheetJson(@CookieValue(value = OPEN_ID_COOKIE) Optional<String> openId, @RequestParam(name = "statementId") Long statementId) throws MyForbiddenException, MyBadRequestException {
+        return weChatService.getOneSheet(openId, statementId);
     }
 
     @RequestMapping(value = "bind", method = RequestMethod.POST)

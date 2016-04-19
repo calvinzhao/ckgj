@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <title>报表</title>
+    <meta charset="UTF-8" />
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <meta name="statementId" th:content="${statementId}"/>
+    <script type="text/javascript" src="/js/jquery-1.7.2.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var value = /*[[${statementId}]]*/ '';
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+            var statementId = $("meta[name='statementId']").attr("content");
+            var headers = {};
+            headers[header] = token;
+            var data = {};
+            data["statementId"] = statementId;
+            $.ajax({
+                    url: "/wechat/sheet_json",
+                    type: "POST",
+                    data: data,
+                    dataType:'json',
+                    headers: headers,
+                    error: function(xhr, status, error) {
+                        alert(JSON.parse(xhr.responseText).message);
+                    },
+                    success: function(data, status, xhr) {
+                        $("div#sheetContainer p").html(JSON.stringify(data));
+                    }
+                });
+        });
+    </script>
+</head>
+<body>
+<div id="sheetContainer"><p></p></div>
+</body>
+</html>

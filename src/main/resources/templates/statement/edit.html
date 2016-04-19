@@ -4,23 +4,105 @@
       layout:decorator="layout">
 <head>
     <title>编辑报表</title>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <script type="text/javascript" src="/js/jquery-1.7.2.js"></script>
+    <script type="text/javascript">
+        var save = function() {
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+            var headers = {};
+            headers[header] = token;
+            var data = {};
+            data["id"] = $("#id").attr("value");
+            data["cash"] = $("#cash").attr("value");
+            data["bankAccount"] = $("#bankAccount").attr("value");
+            data["revenue"] = $("#revenue").attr("value");
+            data["income"] = $("#income").attr("value");
+            data["cost"] = $("#cost").attr("value");
+            data["supplierCost"] = $("#supplierCost").attr("value");
+            data["salaryCost"] = $("#salaryCost").attr("value");
+            data["taxCost"] = $("#taxCost").attr("value");
+            data["receivable"] = $("#receivable").attr("value");
+            data["debt"] = $("#debt").attr("value");
+            data["supplierDebt"] = $("#supplierDebt").attr("value");
+            data["salaryDebt"] = $("#salaryDebt").attr("value");
+            data["taxDebt"] = $("#taxDebt").attr("value");
+            data["asset"] = $("#asset").attr("value");
+            data["liability"] = $("#liability").attr("value");
+            data["equity"] = $("#equity").attr("value");
+            $.ajax({
+                url: "/admin/statement/edit",
+                type: "POST",
+                data: data,
+                dataType:'json',
+                headers: headers,
+                error: function(xhr, status, error) {
+                    $("div#message").css("display", "block");
+                    $("div#message p").text(JSON.parse(xhr.responseText).message);
+                },
+                success: function(data, status, xhr) {
+                    $("div#message").css("display", "none");
+                    alert(data.msg);
+                }
+            });
+        }
+    </script>
 </head>
 <body>
-<h1 layout:fragment="header">上传报表</h1>
+<h1 layout:fragment="header">编辑报表</h1>
 <div layout:fragment="content" class="container">
-    <form id="companyForm" th:action="@{/admin/company/form}" th:object="${companyForm}" action="#" method="post">
-        <div th:if="${#fields.hasErrors('*')}" class="alert alert-error">
-            <p th:each="error : ${#fields.errors('*')}" th:text="${error}">验证出错</p>
+    <div class="pull-right">
+        <a href="messages" th:href="@{'/admin/statement/list/' + ${sheet.companyId}}"> 本公司报表 </a>
+    </div>
+    <form>
+        <input type="hidden" id="id" name="id" th:value="${sheet.id}" />
+        <div class="alert alert-error" id="message" th:style="${message} ? 'display:block' : 'display:none'">
+            <p th:text="${message}">验证出错</p>
         </div>
-        <div class="pull-right">
-            <a th:href="@{~/admin/company/}" href="company.html">查看全部</a>
-        </div>
-        <label for="companyId">公司</label>
-        <select name="companyId" id="companyId" th:field="*{companyId}">
-            <option th:each="company: ${companies}" th:value="${company.id}" th:text="${company.name}">company name</option>
-        </select>
+        <label th:text="${'公司：' + sheet.companyName}"></label>
+        <label th:text="${'报告期：' + sheet.period}"></label>
+
+        <label>公司账上有多少钱</label>
+        <label for="cash">现金</label>
+        <input type="text" id="cash" name="cash" th:value="${sheet.cash}" />
+        <label for="bankAccount">银行</label>
+        <input type="text" id="bankAccount" name="bankAccount" th:value="${sheet.bankAccount}" />
+        <label>本月收支情况</label>
+        <label for="revenue">进账</label>
+        <input type="text" id="revenue" name="revenue" th:value="${sheet.revenue}" />
+        <label for="income">其中 收入</label>
+        <input type="text" id="income" name="income" th:value="${sheet.income}" />
+        <label for="cost">支出</label>
+        <input type="text" id="cost" name="cost" th:value="${sheet.cost}" />
+        <label for="supplierCost">其中 供应商</label>
+        <input type="text" id="supplierCost" name="supplierCost" th:value="${sheet.supplierCost}" />
+        <label for="salaryCost">发工资</label>
+        <input type="text" id="salaryCost" name="salaryCost" th:value="${sheet.salaryCost}" />
+        <label for="taxCost">交税</label>
+        <input type="text" id="taxCost" name="taxCost" th:value="${sheet.taxCost}" />
+        <label>没收回来的钱</label>
+        <label for="receivable">欠我们</label>
+        <input type="text" id="receivable" name="receivable" th:value="${sheet.receivable}" />
+        <label>要付出去的钱</label>
+        <label for="debt">我们欠</label>
+        <input type="text" id="debt" name="debt" th:value="${sheet.debt}" />
+        <label for="supplierDebt">其中 供应商</label>
+        <input type="text" id="supplierDebt" name="supplierDebt" th:value="${sheet.supplierDebt}" />
+        <label for="salaryDebt">工资</label>
+        <input type="text" id="salaryDebt" name="salaryDebt" th:value="${sheet.salaryDebt}" />
+        <label for="taxDebt">税务局</label>
+        <input type="text" id="taxDebt" name="taxDebt" th:value="${sheet.taxDebt}" />
+        <label for="asset">公司总资产</label>
+        <input type="text" id="asset" name="asset" th:value="${sheet.asset}" />
+        <label>这些资产从哪里来</label>
+        <label for="liability">需要偿还</label>
+        <input type="text" id="liability" name="liability" th:value="${sheet.liability}" />
+        <label for="equity">属于股东的</label>
+        <input type="text" id="equity" name="equity" th:value="${sheet.equity}" />
         <div class="form-actions">
-            <input type="submit" value="Save"/>
+            <input type="button" onclick="save()" value="保存"/>
+            <a href="form.html" th:href="@{'/admin/statement/delete/' + ${sheet.id}}"> 删除 </a>
         </div>
     </form>
 </div>

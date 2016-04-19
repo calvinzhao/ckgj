@@ -26,7 +26,7 @@
         <dd id="employeeCnt" th:text="${company.employeeCnt}">employee count</dd>
     </dl>
     <div class="pull-left">
-        <a href="messages" th:href="@{'/admin/company/delete/' + ${company.id}}"> 删除 </a> |
+        <a href="messages" th:href="@{'/admin/statement/list/' + ${company.id}}"> 公司报表 </a> |
         <a href="form.html" th:href="@{'/admin/company/modify/' + ${company.id}}"> 编辑 </a>
     </div>
 </div>

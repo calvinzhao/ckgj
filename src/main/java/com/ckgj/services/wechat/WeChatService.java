@@ -1,9 +1,13 @@
 package com.ckgj.services.wechat;
 
 import com.ckgj.config.WeChatConfig;
+import com.ckgj.models.MyBadRequestException;
+import com.ckgj.models.MyForbiddenException;
+import com.ckgj.models.statement.StatementSheet;
 import com.ckgj.models.user.User;
 import com.ckgj.models.wxuser.WxOauthState;
 import com.ckgj.models.wxuser.WxUser;
+import com.ckgj.services.statement.StatementService;
 import com.ckgj.services.user.UserService;
 import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.common.exception.WxErrorException;
@@ -18,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -31,12 +36,16 @@ public class WeChatService {
     private final WxUserRepository wxUserRepository;
     @Autowired
     private final UserService userService;
+    @Autowired
+    private final StatementService statementService;
 
     @Autowired
-    public WeChatService(WeChatConfig weChatConfig, WxUserRepository wxUserRepository, UserService userService) {
+    public WeChatService(WeChatConfig weChatConfig, WxUserRepository wxUserRepository, UserService userService, StatementService statementService) {
         this.weChatConfig = weChatConfig;
         this.wxUserRepository = wxUserRepository;
         this.userService = userService;
+        this.statementService = statementService;
+
         WxMpInMemoryConfigStorage config = new WxMpInMemoryConfigStorage();
         config.setAppId(weChatConfig.getWxAppId());
         config.setSecret(weChatConfig.getWxSecret());
@@ -105,11 +114,35 @@ public class WeChatService {
                 throw new IllegalArgumentException(String.format("[ERROR] already bind to user(phone: %s)",
                         wxUser.getUser().getPhone()));
             } else {
-                return user;
+                return userService.bindWxUser(user, wxUser);
             }
         }
+        user = userService.bindWxUser(user, wxUser);
         wxUser.setUser(user);
         wxUserRepository.save(wxUser);
-        return userService.bindWxUser(user, wxUser);
+        return user;
+    }
+
+    public List<StatementSheet> mySheets(User user) {
+        return statementService.sortedSheet(user.getCompany());
+    }
+
+    public StatementSheet getOneSheet(Optional<String> openId, Long statementId) throws MyForbiddenException, MyBadRequestException {
+        if (!openId.isPresent()) {
+            throw new MyForbiddenException("你无权查看该公司报表");
+        }
+        Optional<User> userOptional = getUserByOpenId(openId.get());
+        if (!userOptional.isPresent()) {
+            throw new MyForbiddenException("你无权查看该公司报表");
+        }
+        Optional<StatementSheet> sheetOptional = statementService.getOneSheet(statementId);
+        if (!sheetOptional.isPresent()) {
+            throw new MyBadRequestException("该期报表不存在");
+        }
+        StatementSheet sheet = sheetOptional.get();
+        if (userOptional.get().getCompany().getId() != sheet.getCompanyId()) {
+            throw new MyForbiddenException("你无权查看该公司报表");
+        }
+        return sheet;
     }
 }
