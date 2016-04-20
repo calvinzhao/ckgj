@@ -1,12 +1,18 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" >
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>报表</title>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <meta name="statementId" th:content="${statementId}"/>
     <script type="text/javascript" src="/js/jquery-1.7.2.js"></script>
+    <link rel="stylesheet" href="/css/my-custom-theme.css"/>
+    <link rel="stylesheet" href="/css/jquery.mobile.icons.min.css"/>
+    <script type="text/javascript"
+            src="http://ajax.aspnetcdn.com/ajax/jquery.mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <link rel="stylesheet" type="text/css"
+          href="http://ajax.aspnetcdn.com/ajax/jquery.mobile/1.4.5/jquery.mobile.structure-1.4.5.min.css">
     <script type="text/javascript">
         $(document).ready(function() {
             var value = /*[[${statementId}]]*/ '';
@@ -27,13 +33,80 @@
                         alert(JSON.parse(xhr.responseText).message);
                     },
                     success: function(data, status, xhr) {
-                        $("div#sheetContainer p").html(JSON.stringify(data));
+                        // TODO
                     }
                 });
         });
+
+        function navnext(next) {
+            $(":mobile-pagecontainer").pagecontainer("change", next, {
+                transition: "slide"
+            });
+        }
+
+        function navprev(prev) {
+            $(":mobile-pagecontainer").pagecontainer("change", prev, {
+                transition: "slide",
+                reverse: true
+            });
+        }
+
+
+        $(document).one("pagecreate", "#page1", function() {
+            // Handler for navigating to the next page
+            // Navigate to the next page on swipeleft
+            $(document).on("swipeleft", ".ui-page", function(event) {
+                // Get the filename of the next page. We stored that in the data-next
+                // attribute in the original markup.
+                var next = $(this).jqmData("next");
+                if (next) {
+                    navnext(next);
+                }
+            });
+            // The same for the navigating to the previous page
+            $(document).on("swiperight", ".ui-page", function(event) {
+                var prev = $(this).jqmData("prev");
+                if (prev) {
+                    navprev(prev);
+                }
+            });
+        });
+
     </script>
 </head>
 <body>
-<div id="sheetContainer"><p></p></div>
+<div id="page1" data-role="page" data-prev="" data-next="#page2">
+    <div data-role="header" data-position='fixed'>
+        <h1>Page 1</h1>
+    </div>
+    <div data-role="content">
+        <label for="phone">手机: </label>
+        <input id="phone" name="phone" type="text" data-theme="a" class="input" data-form="ui-body-a">
+        <label for="password">密码: </label>
+        <input id="password" name="password" type="password" data-theme="a" class="input" data-form="ui-body-a">
+        <button data-icon="star" data-theme="a" data-form="ui-btn-up-a"
+                class=" ui-btn ui-btn-a ui-icon-star ui-btn-icon-left ui-shadow ui-corner-all" id="bind" name="bind"
+                onclick="bind()">绑定
+        </button>
+    </div>
+</div>
+
+<div id="page2" data-role="page" data-prev="#page1" data-next="#page3">
+    <div data-role="header" data-position='fixed'>
+        <h1>Page 2</h1>
+    </div>
+    <div data-role="content">
+        I am page 2
+    </div>
+</div>
+
+<div id="page3" data-role="page" data-prev="#page2" data-next="">
+    <div data-role="header" data-position='fixed'>
+        <h1>Page 3</h1>
+    </div>
+    <div data-role="content">
+        I am page 3
+    </div>
+</div>
 </body>
 </html>
