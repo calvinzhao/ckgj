@@ -9,7 +9,6 @@ import com.ckgj.models.wxuser.WxUser;
 import com.ckgj.services.user.UserService;
 import com.ckgj.services.wechat.WeChatService;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;

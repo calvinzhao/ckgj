@@ -28,6 +28,13 @@
     <script type="text/javascript">
     /*<![CDATA[*/
         $(document).ready(function() {
+            $("div#main").css("display", "none");
+            $.mobile.loading( "show", {
+                                text: "Loading...",
+                                textVisible: true,
+                                theme: "b",
+                                textonly: false
+                        });
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
             var statementId = $("meta[name='statementId']").attr("content");
@@ -42,6 +49,7 @@
                     dataType:'json',
                     headers: headers,
                     error: function(xhr, status, error) {
+                        $.mobile.loading("hide");
                         alert(JSON.parse(xhr.responseText).message);
                     },
                     success: function(data, status, xhr) {
@@ -51,13 +59,6 @@
         });
 
         function renderData(data) {
-            data = {"id":2,"companyName":"zhao","companyId":1,"dateCreated":1461056718000,"period":{"year":2016,"month":3,"sqlStr":"2016-03"},"cash":1800.0,"bankAccount":1200.0,"revenue":300.0,"income":200.0,"cost":200.0,"supplierCost":100.0,"salaryCost":50.0,"taxCost":50.0,"receivable":400.0,"debt":400.0,"supplierDebt":100.0,"salaryDebt":100.0,"taxDebt":100.0,"asset":1000.0,"liability":600.0,"equity":400.0};
-
-            drawChart1(data.cash, data.bankAccount);
-            drawChart2(data.revenue, data.income, -data.supplierCost, -data.salaryCost, -data.taxCost);
-            drawChart3(data.supplierDebt, data.salaryDebt, data.taxDebt);
-            drawChart4(data.liability, data.equity);
-
             $("label[name='period']").html(data.period.sqlStr);
             $("var[name='cash']").html(data.cash);
             $("var[name='bankAccount']").html(data.bankAccount);
@@ -75,6 +76,13 @@
             $("var[name='asset']").html(data.asset);
             $("var[name='liability']").html(data.liability);
             $("var[name='equity']").html(data.equity);
+
+            drawChart1(data.cash, data.bankAccount);
+            drawChart2(data.revenue, data.income, -data.supplierCost, -data.salaryCost, -data.taxCost);
+            drawChart3(data.supplierDebt, data.salaryDebt, data.taxDebt);
+            drawChart4(data.liability, data.equity);
+            $.mobile.loading("hide");
+            $("div#main").css("display", "block");
         }
 
         function drawChart1(cash, bankAccount) {
@@ -305,75 +313,77 @@
     </script>
 </head>
 <body>
-<div id="page1" data-role="page" data-prev="" data-next="#page2">
-    <div data-role="header" data-position='fixed'>
-        <h1><label style="display:inline" name="period"></label>期财务报告(1)</h1>
+<div id="main" style="display: none">
+    <div id="page1" data-role="page" data-prev="" data-next="#page2">
+        <div data-role="header" data-position='fixed'>
+            <h1><label style="display:inline" name="period"></label>期财务报告(1)</h1>
+        </div>
+        <div data-role="content">
+            <p>公司账上有多少钱</p>
+            <pre>  现金<var name="cash" class="debit"></var>万元，银行<var name="bankAccount" class="debit"></var>万元</pre>
+            <p>本月（季）收支情况</p>
+            <pre>  进账<var name="revenue" class="debit"></var>万元</pre>
+            <pre>   其中收入<var name="income" class="debit"></var>万元</pre>
+            <pre>  支出<var name="cost" class="credit"></var>万元</pre>
+            <pre>   其中供应商<var name="supplierCost" class="credit"></var>万元；工资<var name="salaryCost" class="credit"></var>万元；交税<var name="taxCost" class="credit"></var>万元</pre>
+            <p>有多少钱还没收回来</p>
+            <pre>  <var name="receivable" class="debit"></var>万元</pre>
+            <p>有多少钱要付出去</p>
+            <pre>  <var name="debt" class="credit"></var>万元</pre>
+            <pre>   其中供应商<var name="supplierDebt" class="credit"></var>万元；工资<var name="salaryDebt" class="credit"></var>万元；交税<var name="taxDebt" class="credit"></var>万元</pre>
+        </div>
     </div>
-    <div data-role="content">
-        <p>公司账上有多少钱</p>
-        <pre>  现金<var name="cash" class="debit"></var>万元，银行<var name="bankAccount" class="debit"></var>万元</pre>
-        <p>本月（季）收支情况</p>
-        <pre>  进账<var name="revenue" class="debit"></var>万元</pre>
-        <pre>   其中收入<var name="income" class="debit"></var>万元</pre>
-        <pre>  支出<var name="cost" class="credit"></var>万元</pre>
-        <pre>   其中供应商<var name="supplierCost" class="credit"></var>万元；工资<var name="salaryCost" class="credit"></var>万元；交税<var name="taxCost" class="credit"></var>万元</pre>
-        <p>有多少钱还没收回来</p>
-        <pre>  <var name="receivable" class="debit"></var>万元</pre>
-        <p>有多少钱要付出去</p>
-        <pre>  <var name="debt" class="credit"></var>万元</pre>
-        <pre>   其中供应商<var name="supplierDebt" class="credit"></var>万元；工资<var name="salaryDebt" class="credit"></var>万元；交税<var name="taxDebt" class="credit"></var>万元</pre>
-    </div>
-</div>
 
-<div id="page2" data-role="page" data-prev="#page1" data-next="#page3">
-    <div data-role="header" data-position='fixed'>
-        <h1><label style="display:inline" name="period"></label>期财务报告(2)</h1>
+    <div id="page2" data-role="page" data-prev="#page1" data-next="#page3">
+        <div data-role="header" data-position='fixed'>
+            <h1><label style="display:inline" name="period"></label>期财务报告(2)</h1>
+        </div>
+        <div data-role="content">
+            <p>公司账上有多少资产<var name="asset" class="debit"></var>万元</p>
+            <p>这些资产从哪里来</p>
+            <pre>  属于股东的<var name="equity" class="credit"></var>万元</pre>
+            <pre>  需要偿还的<var name="liability" class="credit"></var>万元</pre>
+        </div>
     </div>
-    <div data-role="content">
-        <p>公司账上有多少资产<var name="asset" class="debit"></var>万元</p>
-        <p>这些资产从哪里来</p>
-        <pre>  属于股东的<var name="equity" class="credit"></var>万元</pre>
-        <pre>  需要偿还的<var name="liability" class="credit"></var>万元</pre>
-    </div>
-</div>
 
-<div id="page3" data-role="page" data-prev="#page2" data-next="#page4">
-    <div data-role="header" data-position='fixed'>
-        <h1><label style="display:inline" name="period"></label>期财务报告(3)</h1>
+    <div id="page3" data-role="page" data-prev="#page2" data-next="#page4">
+        <div data-role="header" data-position='fixed'>
+            <h1><label style="display:inline" name="period"></label>期财务报告(3)</h1>
+        </div>
+        <div data-role="content">
+            <p>公司账上有多少钱</p>
+            <div id="chart-container1" style="height: 400px; min-width: 92%; margin: 0 auto"></div>
+        </div>
     </div>
-    <div data-role="content">
-        <p>公司账上有多少钱</p>
-        <div id="chart-container1" style="height: 400px; min-width: 92%; margin: 0 auto"></div>
-    </div>
-</div>
 
-<div id="page4" data-role="page" data-prev="#page3" data-next="#page5">
-    <div data-role="header" data-position='fixed'>
-        <h1><label style="display:inline" name="period"></label>期财务报告(4)</h1>
+    <div id="page4" data-role="page" data-prev="#page3" data-next="#page5">
+        <div data-role="header" data-position='fixed'>
+            <h1><label style="display:inline" name="period"></label>期财务报告(4)</h1>
+        </div>
+        <div data-role="content">
+            <p>本月收支情况</p>
+            <div id="chart-container2" style="height: 400px; min-width: 92%; margin: 0 auto"></div>
+        </div>
     </div>
-    <div data-role="content">
-        <p>本月收支情况</p>
-        <div id="chart-container2" style="height: 400px; min-width: 92%; margin: 0 auto"></div>
-    </div>
-</div>
 
-<div id="page5" data-role="page" data-prev="#page4" data-next="#page6">
-    <div data-role="header" data-position='fixed'>
-        <h1><label style="display:inline" name="period"></label>期财务报告(5)</h1>
+    <div id="page5" data-role="page" data-prev="#page4" data-next="#page6">
+        <div data-role="header" data-position='fixed'>
+            <h1><label style="display:inline" name="period"></label>期财务报告(5)</h1>
+        </div>
+        <div data-role="content">
+            <p>有<var name="debt" class="credit"></var>万要付出去</p>
+            <div id="chart-container3" style="height: 400px; min-width: 92%; margin: 0 auto"></div>
+        </div>
     </div>
-    <div data-role="content">
-        <p>有<var name="debt" class="credit"></var>万要付出去</p>
-        <div id="chart-container3" style="height: 400px; min-width: 92%; margin: 0 auto"></div>
-    </div>
-</div>
 
-<div id="page6" data-role="page" data-prev="#page5" data-next="">
-    <div data-role="header" data-position='fixed'>
-        <h1><label style="display:inline" name="period"></label>期财务报告(6)</h1>
-    </div>
-    <div data-role="content">
-        <p>公司账上有<var name="asset" class="debit"></var>万，资产渠道为</p>
-        <div id="chart-container4" style="height: 400px; min-width: 92%; margin: 0 auto"></div>
+    <div id="page6" data-role="page" data-prev="#page5" data-next="">
+        <div data-role="header" data-position='fixed'>
+            <h1><label style="display:inline" name="period"></label>期财务报告(6)</h1>
+        </div>
+        <div data-role="content">
+            <p>公司账上有<var name="asset" class="debit"></var>万，资产渠道为</p>
+            <div id="chart-container4" style="height: 400px; min-width: 92%; margin: 0 auto"></div>
+        </div>
     </div>
 </div>
 </body>
