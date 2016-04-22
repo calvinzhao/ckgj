@@ -20,7 +20,7 @@
         <ul data-role="listview" data-inset="true" class="ui-listview ui-listview-inset ui-corner-all ui-shadow">
             <li data-role="list-divider" data-theme="a" data-swatch="a" data-form="ui-bar-a" role="heading" class="ui-li-divider ui-bar-a ui-first-child">点击查看报告</li>
             <li th:each="sheet : ${sheets}">
-                <a href="login.html" th:href="@{/wechat/report/{id}(id=${sheet.id})}" th:text="'第 ' + ${sheet.period} + ' 期报告'">第 ' + ${sheet.period} + ' 期报告</a>
+                <a href="login.html" th:href="@{/wechat/report/{id}(id=${sheet.id})}" th:text="'第 ' + ${sheet.period} + ' 期报告'" data-ajax="false">第 ' + ${sheet.period} + ' 期报告</a>
             </li>
         </ul>
     </div>
