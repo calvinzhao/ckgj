@@ -25,7 +25,7 @@
         </tr>
         <tr th:each="company : ${companies}">
             <td th:text="${company.id}">1</td>
-            <td><a href="view.html" th:href="@{${company.id}}" th:text="${company.name}"> 苹果 </a></td>
+            <td><a href="view.html" th:href="@{/admin/company/{id}(id=${company.id})}" th:text="${company.name}"> 苹果 </a></td>
             <td th:text="${#calendars.format(company.dateCreated)}">
                 Wed Mar 30 16:31:14 CST 2016
             </td>
