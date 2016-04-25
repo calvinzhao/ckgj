@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <meta name="statementId" th:content="${statementId}"/>
     <script type="text/javascript" src="/js/jquery-1.7.2.js"></script>
     <link rel="stylesheet" href="/css/my-custom-theme.css" />
     <link rel="stylesheet" href="/css/jquery.mobile.icons.min.css" />
@@ -24,24 +23,28 @@
             font-weight: bold;
             color: green;
         }
+
+        .hidden {
+            display: none;
+        }
     </style>
     <script type="text/javascript">
     /*<![CDATA[*/
         $(document).ready(function() {
-            $("div#main").css("display", "none");
+            $("div[data-role='content']").addClass("hidden");
             $.mobile.loading( "show", {
                                 text: "Loading...",
                                 textVisible: true,
                                 theme: "b",
                                 textonly: false
                         });
+
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
-            var statementId = $("meta[name='statementId']").attr("content");
             var headers = {};
             headers[header] = token;
             var data = {};
-            data["statementId"] = statementId;
+            data["statementId"] = [[${statementId}]];;
             $.ajax({
                     url: "/wechat/sheet_json",
                     type: "POST",
@@ -59,7 +62,7 @@
         });
 
         function renderData(data) {
-            $("label[name='period']").html(data.period.sqlStr);
+            $("label[name='period']").html(data.period.sqlStr + "期");
             $("var[name='cash']").html(data.cash);
             $("var[name='bankAccount']").html(data.bankAccount);
             $("var[name='revenue']").html(data.revenue);
@@ -81,8 +84,9 @@
             drawChart2(data.revenue, data.income, -data.supplierCost, -data.salaryCost, -data.taxCost);
             drawChart3(data.supplierDebt, data.salaryDebt, data.taxDebt);
             drawChart4(data.liability, data.equity);
+
             $.mobile.loading("hide");
-            $("div#main").css("display", "block");
+            $("div[data-role='content']").removeClass("hidden");
         }
 
         function drawChart1(cash, bankAccount) {
@@ -313,10 +317,9 @@
     </script>
 </head>
 <body>
-<div id="main" style="display: none">
     <div id="page1" data-role="page" data-prev="" data-next="#page2">
         <div data-role="header" data-position='fixed'>
-            <h1><label style="display:inline" name="period"></label>期财务报告(1)</h1>
+            <h1><label style="display:inline" name="period"></label>报告(1)</h1>
         </div>
         <div data-role="content">
             <p>公司账上有多少钱</p>
@@ -336,7 +339,7 @@
 
     <div id="page2" data-role="page" data-prev="#page1" data-next="#page3">
         <div data-role="header" data-position='fixed'>
-            <h1><label style="display:inline" name="period"></label>期财务报告(2)</h1>
+            <h1><label style="display:inline" name="period"></label>报告(2)</h1>
         </div>
         <div data-role="content">
             <p>公司账上有多少资产<var name="asset" class="debit"></var>万元</p>
@@ -348,7 +351,7 @@
 
     <div id="page3" data-role="page" data-prev="#page2" data-next="#page4">
         <div data-role="header" data-position='fixed'>
-            <h1><label style="display:inline" name="period"></label>期财务报告(3)</h1>
+            <h1><label style="display:inline" name="period"></label>报告(3)</h1>
         </div>
         <div data-role="content">
             <p>公司账上有多少钱</p>
@@ -358,7 +361,7 @@
 
     <div id="page4" data-role="page" data-prev="#page3" data-next="#page5">
         <div data-role="header" data-position='fixed'>
-            <h1><label style="display:inline" name="period"></label>期财务报告(4)</h1>
+            <h1><label style="display:inline" name="period"></label>报告(4)</h1>
         </div>
         <div data-role="content">
             <p>本月收支情况</p>
@@ -368,7 +371,7 @@
 
     <div id="page5" data-role="page" data-prev="#page4" data-next="#page6">
         <div data-role="header" data-position='fixed'>
-            <h1><label style="display:inline" name="period"></label>期财务报告(5)</h1>
+            <h1><label style="display:inline" name="period"></label>报告(5)</h1>
         </div>
         <div data-role="content">
             <p>有<var name="debt" class="credit"></var>万要付出去</p>
@@ -378,13 +381,12 @@
 
     <div id="page6" data-role="page" data-prev="#page5" data-next="">
         <div data-role="header" data-position='fixed'>
-            <h1><label style="display:inline" name="period"></label>期财务报告(6)</h1>
+            <h1><label style="display:inline" name="period"></label>报告(6)</h1>
         </div>
         <div data-role="content">
             <p>公司账上有<var name="asset" class="debit"></var>万，资产渠道为</p>
             <div id="chart-container4" style="height: 400px; min-width: 92%; margin: 0 auto"></div>
         </div>
     </div>
-</div>
 </body>
 </html>
